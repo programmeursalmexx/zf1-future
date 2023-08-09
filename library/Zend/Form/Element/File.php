@@ -912,4 +912,11 @@ class Zend_Form_Element_File extends Zend_Form_Element_Xhtml
 
         return $messages;
     }
+
+    public function clearErrorMessages()
+    {
+        parent::clearErrorMessages();
+        $this->getTransferAdapter()->clearMessages();
+        return $this;
+    }
 }
