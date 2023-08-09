@@ -1568,4 +1568,9 @@ abstract class Zend_File_Transfer_Adapter_Abstract
 
         return false;
     }
+
+    public function clearMessages()
+    {
+        $this->_messages = array();
+    }
 }
