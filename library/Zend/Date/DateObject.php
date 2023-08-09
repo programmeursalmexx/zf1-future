@@ -157,7 +157,9 @@ abstract class Zend_Date_DateObject
     protected function mktime($hour, $minute, $second, $month, $day, $year, $gmt = false)
     {
         // complete date but in 32bit timestamp - use PHP internal
-        if ((1901 < $year) && ($year < 2038)) {
+        // PHP internal werkt nu ook met datums na 2038, geef gewoon die de voorkeur in de toekomst -- alleen hele oude datums
+        // hebben baat bij Zend's code
+        if (1901 < $year) {
 
             $oldzone = @date_default_timezone_get();
             // Timezone also includes DST settings, therefor substracting the GMT offset is not enough
@@ -190,7 +192,7 @@ abstract class Zend_Date_DateObject
 
         // correct months > 12 and months < 1
         if ($month > 12) {
-            $overlap = floor($month / 12);
+            $overlap = floor(($month - 1) / 12);
             $year   += $overlap;
             $month  -= $overlap * 12;
         } else {
