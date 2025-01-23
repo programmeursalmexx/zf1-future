@@ -715,6 +715,8 @@ abstract class Zend_Date_DateObject
         $otimestamp = $timestamp;
         $numday = 0;
         $month = 0;
+        $year = 0;
+
         // gregorian correction
         if ($timestamp < -12219321600) {
             $timestamp -= 864000;
@@ -990,7 +992,7 @@ abstract class Zend_Date_DateObject
         // adjust quadrant
         if ($solLongitude > $threeQuarterCircle) {
             $solAscension += $fullCircle;
-        } else if ($solLongitude > $quarterCircle) {
+        } elseif ($solLongitude > $quarterCircle) {
             $solAscension += $halfCircle;
         }
 
@@ -1031,9 +1033,16 @@ abstract class Zend_Date_DateObject
         $universalTime    = ($universalTime - $min) * 60;
         $sec  = (int)$universalTime;
 
-        return $this->mktime($hour, $min, $sec, $this->date('m', $this->_unixTimestamp),
-                             $this->date('j', $this->_unixTimestamp), $this->date('Y', $this->_unixTimestamp),
-                             -1, true);
+        // @todo re-check removed arguement "-1"
+        return $this->mktime(
+            $hour,
+            $min,
+            $sec,
+            $this->date('m', $this->_unixTimestamp),
+            $this->date('j', $this->_unixTimestamp),
+            $this->date('Y', $this->_unixTimestamp),
+            true
+        );
     }
 
     /**
@@ -1096,6 +1105,7 @@ abstract class Zend_Date_DateObject
      */
     public function getGmtOffset()
     {
+        $offset = 0;
         $date   = $this->getDateParts($this->getUnixTimestamp(), true);
         $zone   = @date_default_timezone_get();
         $result = @date_default_timezone_set($this->_timezone);
